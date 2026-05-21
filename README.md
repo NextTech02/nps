@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Encuesta NPS · Federación Colombiana de Póker
 
-## Getting Started
+Formulário de NPS (Net Promoter Score) bilíngue (Espanhol/Inglês) para o
+evento **CCP Barranquilla**, com identidade visual da FCP e respostas salvas
+no Supabase.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) + **React 19** + **TypeScript**
+- **Tailwind CSS v4** (tema com a paleta oficial da FCP)
+- **Supabase** (`@supabase/supabase-js`) para persistir as respostas
+
+## Configuração
+
+### 1. Banco de dados (Supabase)
+
+1. Abra o seu projeto no [Supabase](https://supabase.com) → **SQL Editor**.
+2. Cole e execute o conteúdo de [`supabase/schema.sql`](./supabase/schema.sql).
+   Isso cria a tabela `nps_responses` e ativa **RLS**: o site pode apenas
+   **inserir** respostas (com a chave `anon`); a leitura só é possível pelo
+   painel do Supabase ou com a `service_role`.
+
+### 2. Variáveis de ambiente
+
+Copie `.env.local.example` para `.env.local` e preencha com os valores de
+**Project Settings → API**:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_SUPABASE_URL=https://SEU-PROJETO.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sua-anon-public-key
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Rodar localmente
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Acesse http://localhost:3000.
 
-## Learn More
+## Estrutura
 
-To learn more about Next.js, take a look at the following resources:
+| Arquivo | Função |
+|---|---|
+| `app/page.tsx` | Página que renderiza o formulário |
+| `app/layout.tsx` | Layout, fonte (DM Sans) e metadados |
+| `app/globals.css` | Tema Tailwind com a paleta da FCP |
+| `components/NpsForm.tsx` | Formulário (estado, validação, envio, idioma) |
+| `components/StarRating.tsx` | Avaliação 1–5 estrelas |
+| `components/NpsScale.tsx` | Escala NPS 1–10 |
+| `lib/content.ts` | Textos e opções em ES/EN |
+| `lib/supabase.ts` | Cliente do Supabase |
+| `supabase/schema.sql` | Schema da tabela + RLS |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Perguntas
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Baseadas em `NPS.md`:
 
-## Deploy on Vercel
+1. **Dados gerais** — gênero, data de nascimento, cidade/departamento/país *(opcionais)*
+2. **Experiência geral** — nota 1–5 estrelas* e aspecto mais valorizado*
+3. **Recomendação (NPS)** — escala 1–10*
+4. **Melhorias** — campo aberto *(opcional)*
+5. **Comunidade** — campo aberto *(opcional)*
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+\* obrigatório
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Deploy
+
+Pronto para [Vercel](https://vercel.com): defina as duas variáveis de ambiente
+no painel do projeto e faça o deploy.
