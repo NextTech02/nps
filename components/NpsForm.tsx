@@ -179,7 +179,14 @@ export default function NpsForm() {
     setForm((prev) => ({ ...prev, [key]: value }));
 
   const missingRequired =
-    form.experienceRating === 0 || form.aspect === "" || form.nps === 0;
+    form.gender === "" ||
+    form.birthDate === "" ||
+    form.city.trim() === "" ||
+    form.department.trim() === "" ||
+    form.country.trim() === "" ||
+    form.experienceRating === 0 ||
+    form.aspect === "" ||
+    form.nps === 0;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -312,6 +319,7 @@ export default function NpsForm() {
         <Section index={1} title={t.sections.general}>
           <Field
             label={t.q.gender}
+            required
             optionalLabel={t.optional}
             requiredLabel={t.required}
           >
@@ -326,6 +334,7 @@ export default function NpsForm() {
 
           <Field
             label={t.q.birthDate}
+            required
             optionalLabel={t.optional}
             requiredLabel={t.required}
           >
@@ -341,6 +350,7 @@ export default function NpsForm() {
           <div className="grid gap-4 sm:grid-cols-3">
             <Field
               label={t.q.city}
+              required
               optionalLabel={t.optional}
               requiredLabel={t.required}
               fill
@@ -355,6 +365,7 @@ export default function NpsForm() {
             </Field>
             <Field
               label={t.q.department}
+              required
               optionalLabel={t.optional}
               requiredLabel={t.required}
               fill
@@ -369,6 +380,7 @@ export default function NpsForm() {
             </Field>
             <Field
               label={t.q.country}
+              required
               optionalLabel={t.optional}
               requiredLabel={t.required}
               fill
